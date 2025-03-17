@@ -12,6 +12,7 @@ TOKEN_DOUBLE_QUOTE = "DOUBLE_QUOTE"
 TOKEN_SINGLE_QUOTE = "SINGLE_QUOTE"
 TOKEN_EQUAL = "EQUAL"
 TOKEN_SPACE = 'SPACE'
+TOKEN_DOT = 'DOT'
 
 # Special tokens that are identified thanks to the parser
 TOKEN_STRING = "STRING"
@@ -28,7 +29,7 @@ def tokenize(line):
             tokens.append(f'{TOKEN_INT}:{char}')
         
         elif char == '(':
-            tokens.append(f'{TOKEN_LPAREN}')
+            tokens.append(TOKEN_LPAREN)
         
         elif char == ')':
             tokens.append(TOKEN_RPAREN)
@@ -60,6 +61,9 @@ def tokenize(line):
         elif char == ' ':
             tokens.append(TOKEN_SPACE)
 
+        elif char == '.':
+            tokens.append(TOKEN_DOT)
+
         else:
             tokens.append(f'{TOKEN_CHAR}:{char}')
     
@@ -68,21 +72,40 @@ def tokenize(line):
 # Parsing will transform tokenized chains into words the interpreter can read.
 def parse(tokens):
     parsed = []
+
+    words = []
     temp = []
 
     for token in tokens:
         if token == 'SPACE':
             if temp:
-                parsed.append(temp)
+                words.append(temp)
                 temp = []
         else:
             temp.append(token)
 
     if temp:
-        parsed.append(temp)
+        words.append(temp)
+
+    for word in words:
+        string = identify_string(word)
+        if string != "":
+            parsed.append(f'{TOKEN_STRING}:{string}')
+        else:
+            parsed.append(word)
     
     return parsed
 
+def identify_string(tokens):
+    string = ""
+    
+    while tokens and tokens[0].startswith("CHAR:"):
+        string += tokens.pop(0).split(":")[1]
+    
+    return string
+
+def identify_float():
+    pass
 
 if __name__ == '__main__':
     tokens = tokenize("Test line 23 3.1 =- 6 /2*6: =")
