@@ -11,7 +11,7 @@ TOKEN_COLON = "COLON"
 TOKEN_DOUBLE_QUOTE = "DOUBLE_QUOTE"
 TOKEN_SINGLE_QUOTE = "SINGLE_QUOTE"
 TOKEN_EQUAL = "EQ"
-TOKEN_SPACE = ' '
+TOKEN_SPACE = 'SPACE'
 
 # Tokenized chains are a way to translate characters into tokens the parser can recognize.
 def tokenize(line):
