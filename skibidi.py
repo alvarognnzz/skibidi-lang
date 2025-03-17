@@ -10,10 +10,14 @@ TOKEN_RPAREN = "RPAREN"
 TOKEN_COLON = "COLON"
 TOKEN_DOUBLE_QUOTE = "DOUBLE_QUOTE"
 TOKEN_SINGLE_QUOTE = "SINGLE_QUOTE"
-TOKEN_EQUAL = "EQ"
+TOKEN_EQUAL = "EQUAL"
 TOKEN_SPACE = 'SPACE'
 
-# Tokenized chains are a way to translate characters into tokens the parser can recognize.
+# Special tokens that are identified thanks to the parser
+TOKEN_STRING = "STRING"
+TOKEN_FLOAT = "FLOAT"
+
+# Tokens are a way to translate characters into tokens the parser can recognize.
 def tokenize(line):
     tokens = []
     
@@ -61,4 +65,25 @@ def tokenize(line):
     
     return tokens
 
-print(tokenize("Test line 23 3.1 =- 6 /2*6: ="))
+# Parsing will transform tokenized chains into words the interpreter can read.
+def parse(tokens):
+    parsed = []
+    temp = []
+
+    for token in tokens:
+        if token == 'SPACE':
+            if temp:
+                parsed.append(temp)
+                temp = []
+        else:
+            temp.append(token)
+
+    if temp:
+        parsed.append(temp)
+    
+    return parsed
+
+
+if __name__ == '__main__':
+    tokens = tokenize("Test line 23 3.1 =- 6 /2*6: =")
+    print(parse(tokens))
