@@ -112,11 +112,19 @@ def identify_float(tokens):
             and tokens[1] == "DOT" and tokens[2].startswith("INT:")):
         int_part = tokens.pop(0).split(":")[1]
         tokens.pop(0)
+        
         decimal_part = tokens.pop(0).split(":")[1]
+        while tokens and tokens[0].startswith("INT:"):
+            decimal_part += tokens.pop(0).split(":")[1]
+
         return f"{int_part}.{decimal_part}"
 
     return ''
 
+
+def join_ints():
+    pass
+
 if __name__ == '__main__':
-    tokens = tokenize("Test line 23 3.1 =- 6 /2*6: =")
+    tokens = tokenize("Test line 23 3.141519 =- 6 /2*6: =")
     print(parse(tokens))
