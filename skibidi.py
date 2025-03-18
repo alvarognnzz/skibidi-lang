@@ -86,15 +86,19 @@ def parse(tokens):
         words.append(temp)
 
     for word in words:
+        joined_int = join_ints(word)
+        if joined_int != '':
+            parsed.append(f'{TOKEN_INT}:{joined_int}')
+
         identified_float = identify_float(word)
         if identified_float != "":
             parsed.append(f'{TOKEN_FLOAT}:{identified_float}')
 
-        string = identify_string(word)
-        if string != "":
-            parsed.append(f'{TOKEN_STRING}:{string}')
+        identified_string = identify_string(word)
+        if identified_string != "":
+            parsed.append(f'{TOKEN_STRING}:{identified_string}')
         else:
-            if identified_float == '':
+            if identified_float == '' and joined_int == '':
                 parsed.append(word)
     
     return parsed
@@ -108,8 +112,7 @@ def identify_string(tokens):
     return string
 
 def identify_float(tokens):
-    if (len(tokens) >= 3 and tokens[0].startswith("INT:") 
-            and tokens[1] == "DOT" and tokens[2].startswith("INT:")):
+    if len(tokens) >= 3 and tokens[0].startswith("INT:") and tokens[1] == "DOT" and tokens[2].startswith("INT:"):
         int_part = tokens.pop(0).split(":")[1]
         tokens.pop(0)
         
@@ -122,8 +125,21 @@ def identify_float(tokens):
     return ''
 
 
-def join_ints():
-    pass
+def join_ints(tokens):
+    joined_int = ''
+    
+    is_int = True
+    
+    for token in tokens:
+        if not token.startswith("INT:"):
+            is_int = False
+            break
+
+    if is_int:
+        for token in tokens:
+            joined_int += token.split(':')[1]
+
+    return joined_int
 
 if __name__ == '__main__':
     tokens = tokenize("Test line 23 3.141519 =- 6 /2*6: =")
