@@ -18,7 +18,6 @@ TOKEN_DOT = 'DOT'
 TOKEN_STRING = "STRING"
 TOKEN_FLOAT = "FLOAT"
 
-# Tokens are a way to translate characters into tokens the parser can recognize.
 def tokenize(line):
     tokens = []
     
@@ -69,7 +68,6 @@ def tokenize(line):
     
     return tokens
 
-# Parsing will transform tokenized chains into words the interpreter can read.
 def parse(tokens):
     parsed = []
 
@@ -88,11 +86,16 @@ def parse(tokens):
         words.append(temp)
 
     for word in words:
+        identified_float = identify_float(word)
+        if identified_float != "":
+            parsed.append(f'{TOKEN_FLOAT}:{identified_float}')
+
         string = identify_string(word)
         if string != "":
             parsed.append(f'{TOKEN_STRING}:{string}')
         else:
-            parsed.append(word)
+            if identified_float == '':
+                parsed.append(word)
     
     return parsed
 
@@ -104,8 +107,15 @@ def identify_string(tokens):
     
     return string
 
-def identify_float():
-    pass
+def identify_float(tokens):
+    if (len(tokens) >= 3 and tokens[0].startswith("INT:") 
+            and tokens[1] == "DOT" and tokens[2].startswith("INT:")):
+        int_part = tokens.pop(0).split(":")[1]
+        tokens.pop(0)
+        decimal_part = tokens.pop(0).split(":")[1]
+        return f"{int_part}.{decimal_part}"
+
+    return ''
 
 if __name__ == '__main__':
     tokens = tokenize("Test line 23 3.1 =- 6 /2*6: =")
