@@ -106,7 +106,7 @@ def parse(tokens):
 def identify_string(tokens):
     string = ""
     
-    while tokens and tokens[0].startswith("CHAR:"):
+    while tokens and (tokens[0].startswith("CHAR:") or tokens[0].startswith("INT:")):
         string += tokens.pop(0).split(":")[1]
     
     return string
@@ -142,5 +142,5 @@ def join_ints(tokens):
     return joined_int
 
 if __name__ == '__main__':
-    tokens = tokenize("Test line 23 3.141519 =- 6 /2*6: =")
+    tokens = tokenize("Tes1t line 23 3.141519 =- 6 /2*6: =")
     print(parse(tokens))
