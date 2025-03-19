@@ -18,6 +18,10 @@ def parse(tokens):
         words.append(temp)
 
     for word in words:
+        joined_equals = join_double_equal(word)
+        if joined_equals != '':
+            parsed.append(TOKEN_DOUBLE_EQUAL)
+
         joined_int = join_ints(word)
         if joined_int != '':
             parsed.append(f'{TOKEN_INT}:{joined_int}')
@@ -30,13 +34,23 @@ def parse(tokens):
         if identified_string != "":
             parsed.append(f'{TOKEN_STRING}:{identified_string}')
         else:
-            if identified_float == '' and joined_int == '':
+            if identified_float == '' and joined_int == '' and joined_equals == '':
                 parsed.append(word)
 
     return parsed
 
 def join_double_equal(tokens):
-    pass    
+    is_double_equal = True
+
+    if len(tokens) == 2:
+        for token in tokens:
+            if not token == 'EQUAL':
+                is_double_equal = False
+    else:
+        is_double_equal = False
+    
+    return '' if not is_double_equal else TOKEN_DOUBLE_EQUAL
+
 
 def join_ints(tokens):
     joined_int = ''
