@@ -35,8 +35,24 @@ def parse(tokens):
 
     return parsed
 
+def join_double_equal(tokens):
+    pass    
+
 def join_ints(tokens):
-    return "".join(token.split(":")[1] for token in tokens if token.startswith("INT:"))
+    joined_int = ''
+    
+    is_int = True
+    
+    for token in tokens:
+        if not token.startswith("INT:"):
+            is_int = False
+            break
+
+    if is_int:
+        for token in tokens:
+            joined_int += token.split(':')[1]
+
+    return joined_int
 
 def identify_float(tokens):
     if len(tokens) >= 3 and tokens[0].startswith("INT:") and tokens[1] == TOKEN_DOT and tokens[2].startswith("INT:"):
@@ -53,8 +69,11 @@ def identify_float(tokens):
 
 def identify_string(tokens):
     string = ""
+    has_char = False
 
     while tokens and (tokens[0].startswith("CHAR:") or tokens[0].startswith("INT:")):
+        if tokens[0].startswith("CHAR:"):
+            has_char = True
         string += tokens.pop(0).split(":")[1]
 
-    return string
+    return string if has_char else ""
