@@ -1,9 +1,9 @@
-from tokenizer import tokenize
+from tokenizer import tokenize, advanced_tokenize
 from parser import parse
 
 if __name__ == '__main__':
     code = input("skibidi > ")
     tokens = tokenize(code)
-    parsed = parse(tokens)
+    advanced_tokens = advanced_tokenize(code)
     
-    print(parsed)
+    print(advanced_tokens)
