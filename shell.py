@@ -5,6 +5,6 @@ if __name__ == '__main__':
     code = input("skibidi > ")
     tokens = tokenize(code)
     advanced_tokens = advanced_tokenize(tokens)
-    # parsed = parse(advanced_tokens)
+    parsed = parse(advanced_tokens)
 
-    print(advanced_tokens)
+    print(parsed)

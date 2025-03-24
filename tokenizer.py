@@ -154,7 +154,6 @@ def advanced_tokenize(tokens):
     return parsed
 
 def process_word(word, parsed):
-    """Process a single word and add resulting tokens to parsed list"""
     float_value = identify_float(word.copy())
     if float_value:
         parsed.append(f'{TOKEN_FLOAT}:{float_value}')
